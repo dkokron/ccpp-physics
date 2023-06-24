@@ -167,7 +167,7 @@ if(${LOCAL_CURRENT_SOURCE_DIR}/physics/rte-rrtmgp/rrtmgp/kernels/mo_gas_optics_k
 endif()
 
 # Increase optimization for ugwp_driver_v0.F
-if(CMAKE_BUILD_TYPE STREQUAL "Release" AND ${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
+if(FASTER AND CMAKE_BUILD_TYPE STREQUAL "Release" AND ${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
   SET_SOURCE_FILES_PROPERTIES(${LOCAL_CURRENT_SOURCE_DIR}/physics/ugwp_driver_v0.F
                               APPEND_STRING PROPERTY COMPILE_FLAGS " ${CMAKE_Fortran_FLAGS_PHYSICS} -fp-model=fast -fprotect-parens -fimf-precision=high")
 endif()
