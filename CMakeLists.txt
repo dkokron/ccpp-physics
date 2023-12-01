@@ -159,6 +159,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release" AND ${CMAKE_Fortran_COMPILER_ID} STREQUAL
   endforeach()
 endif()
 
+#if(FASTER AND CMAKE_BUILD_TYPE STREQUAL "Release" AND ${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
+if(CMAKE_BUILD_TYPE STREQUAL "Release" AND ${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
+  find_package(MKL REQUIRED)
+  SET_SOURCE_FILES_PROPERTIES(${LOCAL_CURRENT_SOURCE_DIR}/physics/GFS_rad_time_vary.fv3.F90
+                              APPEND_STRING PROPERTY COMPILE_FLAGS " ${CMAKE_Fortran_FLAGS_PHYSICS} -DUSE_MKL_MERSENNE -I$ENV{MKLROOT}/include")
+endif()
+
 #------------------------------------------------------------------------------
 
 add_library(ccpp_physics STATIC ${SCHEMES} ${SCHEMES_OPENMP_OFF} ${SCHEMES_DYNAMICS} ${CAPS})
@@ -178,7 +185,7 @@ target_include_directories(ccpp_physics PUBLIC
 
 target_link_libraries(ccpp_physics PUBLIC w3emc::w3emc_d
                                           sp::sp_d
-                                          NetCDF::NetCDF_Fortran)
+                                          NetCDF::NetCDF_Fortran mkl_intel_lp64 mkl_sequential mkl_core)
 
 # Define where to install the library
 install(TARGETS ccpp_physics
